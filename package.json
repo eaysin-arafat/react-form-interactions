@@ -1,9 +1,14 @@
 {
   "name": "react-form-usecontrol",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "files": [
     "dist"
+  ],
+  "keywords": [
+    "react-form",
+    "hook-form",
+    "custom-hook-form"
   ],
   "main": "./dist/index.cjs",
   "module": "./dist/index.js",

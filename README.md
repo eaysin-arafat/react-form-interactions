@@ -34,8 +34,8 @@ import Input from './Input'; // Assuming you have an Input component
 const FormComponent = () => {
   // Define initial form state and validation function
   const {
-    formState: state,
-    clear,
+    formState,
+    reset,
     handleBlur,
     handleFocus,
     handleChange,
@@ -66,8 +66,8 @@ const FormComponent = () => {
       <Input
         type="text"
         name="firstName"
-        value={state.firstName.value}
-        error={state.firstName.error}
+        value={formState.firstName.value}
+        error={formState.firstName.error}
         onChange={handleChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
@@ -75,14 +75,26 @@ const FormComponent = () => {
       <Input
         type="text"
         name="lastName"
-        value={state.lastName.value}
-        error={state.lastName.error}
-        onChange={handleChange}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
+        value={formState.lastName.value}
+        error={formState.lastName.error}
+        onChange={(e) =>
+            handleChange(e, () => {
+              console.log("onchange callback");
+            })
+          }
+          onFocus={(e) =>
+            handleFocus(e, () => {
+              console.log("onfocus callback");
+            })
+          }
+          onBlur={(e) =>
+            handleBlur(e, () => {
+              console.log("onblur callback");
+            })
+          }
       />
       <button type="submit">Submit</button>
-      <button type="reset" onClick={clear}>Clear</button>
+      <button type="reset" onClick={reset}>Clear</button>
     </form>
   );
 };
@@ -99,7 +111,7 @@ export default FormComponent;
 - `focused`: An object indicating whether each form field is currently focused.
 - `isDirty`: An object indicating whether each form field has been modified from its initial value.
 
-### `clear()`
+### `reset()`
 
 A function that resets all form fields to their initial values.
 
@@ -128,5 +140,3 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ---
 
 Feel free to customize and expand upon this README to best fit your package's features and usage guidelines!
-
-<br>

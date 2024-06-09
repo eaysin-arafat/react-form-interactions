@@ -150,7 +150,7 @@ const useForm = <T extends Record<string, any>>({
     [getErrors, state]
   );
 
-  const clear = useCallback(() => {
+  const reset = useCallback(() => {
     setState(mapValuesToState(initialValue, true));
   }, [initialValue]);
 
@@ -180,7 +180,7 @@ const useForm = <T extends Record<string, any>>({
     handleChange,
     handleFocus,
     handleBlur,
-    clear,
+    reset,
   };
 };
 
