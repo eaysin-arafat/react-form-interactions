@@ -29,7 +29,6 @@ yarn add react-form-usecontrol
 ```
 import React from 'react';
 import { useForm } from 'react-form-usecontrol';
-import Input from './Input'; // Assuming you have an Input component
 
 const FormComponent = () => {
   // Define initial form state and validation function
@@ -63,38 +62,42 @@ const FormComponent = () => {
 
   return (
     <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
-      <Input
+      <input
         type="text"
         name="firstName"
-        value={formState.firstName.value}
-        error={formState.firstName.error}
+        placeholder="Bangladesh"
+        value={state.firstName.value}
         onChange={handleChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
       />
-      <Input
+      {state.firstName.error && <p>{state.firstName.error}</p>}
+
+      <input
         type="text"
         name="lastName"
-        value={formState.lastName.value}
-        error={formState.lastName.error}
+        placeholder="Bangladesh"
+        value={state.lastName.value}
         onChange={(e) =>
-            handleChange(e, () => {
-              console.log("onchange callback");
-            })
-          }
-          onFocus={(e) =>
-            handleFocus(e, () => {
-              console.log("onfocus callback");
-            })
-          }
-          onBlur={(e) =>
-            handleBlur(e, () => {
-              console.log("onblur callback");
-            })
-          }
+          handleChange(e, () => {
+            console.log("onchange callback");
+          })
+        }
+        onFocus={(e) =>
+          handleFocus(e, () => {
+            console.log("onfocus callback");
+          })
+        }
+        onBlur={(e) =>
+          handleBlur(e, () => {
+            console.log("onblur callback");
+          })
+        }
       />
-      <button type="submit">Submit</button>
+      {state.lastName.error && <p>{state.lastName.error}</p>}
+
       <button type="reset" onClick={reset}>Clear</button>
+      <button type="submit">Submit</button>
     </form>
   );
 };
@@ -102,7 +105,48 @@ const FormComponent = () => {
 export default FormComponent;
 ```
 
-## Documentation
+# Documentation
+
+## Defining `initialValue` and `validator`
+
+When using the `useForm` hook from `react-form-usecontrol`, you need to provide two essential parameters: `initialValue` and `validator`.
+
+#### `initialValue`
+
+The `initialValue` parameter is an object that defines the initial state of your form fields. Each key in this object represents a form field name, and its corresponding value represents the initial value of that field.
+
+For example, if you have a form with `firstName` and `lastName` fields, you can define `initialValue` like this:
+
+```typescript
+const initialValue = {
+  firstName: "",
+  lastName: "",
+};
+```
+
+#### `Validator`
+
+The validator parameter is a function that defines the validation logic for your form fields. It takes the current form values as input and returns an object containing validation errors, if any.
+
+For example, if you want to require both firstName and lastName fields to be filled out, you can define a validator function like this:
+
+```typescript
+const validator = (values: FormState): FormErrors => {
+  const errors: FormErrors = {};
+
+  if (!values.firstName) {
+    errors.firstName = "First name is required";
+  }
+
+  if (!values.lastName) {
+    errors.lastName = "Last name is required";
+  }
+
+  return errors;
+};
+```
+
+## Return Statement Details
 
 ### `formState`
 
