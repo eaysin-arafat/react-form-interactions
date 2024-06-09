@@ -118,6 +118,7 @@ const useForm = <T extends Record<string, any>>({
         values: T;
         touched: Record<string, boolean>;
         focused: Record<string, boolean>;
+        isDirty: Record<string, boolean>;
       }) => void
     ) => {
       e.preventDefault();
@@ -125,6 +126,7 @@ const useForm = <T extends Record<string, any>>({
       const { errors, hasError, values } = getErrors;
       const touched = mapStateToKeys(state, "touched");
       const focused = mapStateToKeys(state, "focused");
+      const isDirty = mapStateToKeys(state, "isDirty");
 
       const prevState = deepClone(state);
 
@@ -142,6 +144,7 @@ const useForm = <T extends Record<string, any>>({
         values,
         touched,
         focused,
+        isDirty,
       });
     },
     [getErrors, state]

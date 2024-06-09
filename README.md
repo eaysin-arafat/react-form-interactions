@@ -1,30 +1,134 @@
-# React + TypeScript + Vite
+# react-form-usecontrol
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+`react-form-usecontrol` is a lightweight and customizable npm package for managing form state in React applications. It provides a custom hook, `useForm`, which simplifies the process of handling form state, validation, and user interactions.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Custom Hook**: Utilize the `useForm` hook to manage form state effortlessly.
+- **Validation Support**: Implement custom validation logic to validate form fields.
+- **Easy Integration**: Seamlessly integrate with existing React applications.
+- **Error Handling**: Handle form submission errors with ease.
+- **Flexible Configuration**: Customize form behavior according to your specific requirements.
 
-## Expanding the ESLint configuration
+## Installation
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+You can install `react-form-usecontrol` via npm or yarn:
 
-- Configure the top-level `parserOptions` property like this:
-
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+```
+npm install react-form-usecontrol
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+or
+
+```
+yarn add react-form-usecontrol
+```
+
+## Usage
+
+```
+import React from 'react';
+import { useForm } from 'react-form-usecontrol';
+import Input from './Input'; // Assuming you have an Input component
+
+const FormComponent = () => {
+  // Define initial form state and validation function
+  const {
+    formState: state,
+    clear,
+    handleBlur,
+    handleFocus,
+    handleChange,
+    handleSubmit,
+  } = useForm<FormState>({
+    initialValue,
+    validator,
+  });
+
+  // Handle form submission
+  const onSubmit = ({
+    hasError,
+    errors,
+    values,
+    touched,
+    focused,
+    isDirty,
+  }) => {
+    if (hasError) {
+      console.log({ errors });
+    } else {
+      console.log({ values, touched, focused, isDirty });
+    }
+  };
+
+  return (
+    <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
+      <Input
+        type="text"
+        name="firstName"
+        value={state.firstName.value}
+        error={state.firstName.error}
+        onChange={handleChange}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+      />
+      <Input
+        type="text"
+        name="lastName"
+        value={state.lastName.value}
+        error={state.lastName.error}
+        onChange={handleChange}
+        onFocus={handleFocus}
+        onBlur={handleBlur}
+      />
+      <button type="submit">Submit</button>
+      <button type="reset" onClick={clear}>Clear</button>
+    </form>
+  );
+};
+
+export default FormComponent;
+```
+
+## Documentation
+
+### `formState`
+
+- `values`: An object containing the current values of each form field.
+- `touched`: An object indicating whether each form field has been touched (i.e., interacted with) by the user.
+- `focused`: An object indicating whether each form field is currently focused.
+- `isDirty`: An object indicating whether each form field has been modified from its initial value.
+
+### `clear()`
+
+A function that resets all form fields to their initial values.
+
+### `handleBlur(callback?)`
+
+A function that handles the blur event on form fields. It optionally takes a callback function that will be invoked with the event object.
+
+### `handleFocus(callback?)`
+
+A function that handles the focus event on form fields. It optionally takes a callback function that will be invoked with the event object.
+
+### `handleChange(callback?)`
+
+A function that handles the change event on form fields. It optionally takes a callback function that will be invoked with the event object.
+
+### `handleSubmit(callback?)`
+
+A function that handles form submission. It optionally takes a callback function that will be invoked with an object containing the form submission details, including whether there are any errors, the errors object, the form values, touched fields, focused fields, and dirty fields.
+
+For detailed documentation and examples, visit the [GitHub repository](https://github.com/example/react-form-usecontrol).
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+Feel free to customize and expand upon this README to best fit your package's features and usage guidelines!
+
+```
+
+```

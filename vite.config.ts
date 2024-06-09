@@ -8,7 +8,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: "src/index.ts",
-      name: "react-useform-hook",
+      name: "react-form-usecontrol",
       fileName: "index",
     },
     rollupOptions: {

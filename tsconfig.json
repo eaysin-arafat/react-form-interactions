@@ -6,7 +6,7 @@
     "module": "ESNext",
     "skipLibCheck": true,
     "paths": {
-      "react-useform-hook": ["./src/index.ts"]
+      "react-form-usecontrol": ["./src/index.ts"]
     },
 
     /* Bundler mode */
