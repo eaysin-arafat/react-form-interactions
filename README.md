@@ -1,6 +1,6 @@
-# react-form-usecontrol
+# react-form-interactions
 
-`react-form-usecontrol` is a lightweight and customizable npm package for managing form state in React applications. It provides a custom hook, `useForm`, which simplifies the process of handling form state, validation, and user interactions.
+`react-form-interactions` is a lightweight and customizable npm package for managing form state in React applications. It provides a custom hook, `useForm`, which simplifies the process of handling form state, validation, and user interactions.
 
 ## Features
 
@@ -12,23 +12,23 @@
 
 ## Installation
 
-You can install `react-form-usecontrol` via npm or yarn:
+You can install `react-form-interactions` via npm or yarn:
 
 ```
-npm install react-form-usecontrol
+npm install react-form-interactions
 ```
 
 or
 
 ```
-yarn add react-form-usecontrol
+yarn add react-form-interactions
 ```
 
 ## Usage
 
 ```
 import React from 'react';
-import { useForm } from 'react-form-usecontrol';
+import { useForm } from 'react-form-interactions';
 
 const FormComponent = () => {
   // Define initial form state and validation function
@@ -109,7 +109,7 @@ export default FormComponent;
 
 ## Defining `initialValue` and `validator`
 
-When using the `useForm` hook from `react-form-usecontrol`, you need to provide two essential parameters: `initialValue` and `validator`.
+When using the `useForm` hook from `react-form-interactions`, you need to provide two essential parameters: `initialValue` and `validator`.
 
 #### `initialValue`
 
@@ -175,7 +175,7 @@ A function that handles the change event on form fields. It optionally takes a c
 
 A function that handles form submission. It optionally takes a callback function that will be invoked with an object containing the form submission details, including whether there are any errors, the errors object, the form values, touched fields, focused fields, and dirty fields.
 
-For detailed documentation and examples, visit the [GitHub repository](https://github.com/example/react-form-usecontrol).
+For detailed documentation and examples, visit the [GitHub repository](https://github.com/example/react-form-interactions).
 
 ## License
 

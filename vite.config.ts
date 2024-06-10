@@ -8,7 +8,7 @@ export default defineConfig({
   build: {
     lib: {
       entry: "src/index.ts",
-      name: "react-form-usecontrol",
+      name: "react-form-interactions",
       fileName: "index",
     },
     rollupOptions: {

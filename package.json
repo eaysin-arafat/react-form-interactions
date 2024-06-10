@@ -1,6 +1,6 @@
 {
-  "name": "react-form-usecontrol",
-  "version": "0.0.1",
+  "name": "react-form-interactions",
+  "version": "0.0.2",
   "type": "module",
   "files": [
     "dist"

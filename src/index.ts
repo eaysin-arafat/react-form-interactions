@@ -1,1 +1,1 @@
-export { default as useForm } from "./hooks/useForm";
+export { default as useFormInteractions } from "./hooks/useFormInteractions";
