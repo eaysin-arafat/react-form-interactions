@@ -175,7 +175,7 @@ A function that handles the change event on form fields. It optionally takes a c
 
 A function that handles form submission. It optionally takes a callback function that will be invoked with an object containing the form submission details, including whether there are any errors, the errors object, the form values, touched fields, focused fields, and dirty fields.
 
-For detailed documentation and examples, visit the [GitHub repository](https://github.com/example/react-form-interactions).
+For detailed documentation and examples, visit the [GitHub repository](https://github.com/eaysin-arafat/react-form-interactions.git).
 
 ## License
 
