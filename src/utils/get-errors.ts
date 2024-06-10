@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { FormErrors, FormState, UseFormProps } from "../types";
+import { FormErrors, FormState, UseFormParams } from "../types";
 import { isObjEmpty } from "./object-utils";
 import { mapStateToKeys } from "./query-state-to-keys";
 
 export const getErrorsFromParams = <T extends Record<string, any>>(
   state: FormState<T>,
-  validator: UseFormProps<T>["validator"]
+  validator: UseFormParams<T>["validator"]
 ): FormErrors<T> => {
   const values = mapStateToKeys(state, "value") as T;
 
