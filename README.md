@@ -341,7 +341,3 @@ const validationRulesConfig: ValidationRules<FormData> = {
 ## Summary
 
 This validation guide provides an overview of the built-in validation rules available in the useFormInteractions package, along with examples of how to configure and use these rules in your React forms. The package offers a flexible and comprehensive way to manage form validation, ensuring data integrity and improving the user experience.
-
-# Additional Resources
-
-- **GitHub Repository**: Link to the useFormInteractions GitHub repository.
