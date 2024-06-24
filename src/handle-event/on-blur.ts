@@ -1,27 +1,29 @@
-import { Callback, ChangeEventType, FormErrors, FormState } from "../types";
-import { validateCallback } from "../utils";
+import { CallbackType } from "../types/callback";
+import { FormState } from "../types/form-state";
+import { ValidationRule } from "../types/validations";
+import { validateField } from "../utils/validate-field";
 
 export const onBlur = <T>(
-  e: ChangeEventType,
-  setState: React.Dispatch<React.SetStateAction<FormState<T>>>,
-  getErrors: FormErrors<T>,
-  callback?: Callback
+  { event, callback }: CallbackType,
+  formState: FormState<T>,
+  validationRulesConfig: Partial<Record<keyof T, ValidationRule<T>[]>>,
+  setFormState: React.Dispatch<React.SetStateAction<FormState<T>>>
 ) => {
-  const key = e.target.name;
-  const errors = getErrors as unknown as Record<string, string>;
-
-  if (callback) {
-    validateCallback(callback, e);
-  }
-
-  setState((prevState) => ({
+  const { name, value } = event.target;
+  setFormState((prevState) => ({
     ...prevState,
-    [key as keyof FormState<T>]: {
-      ...prevState[key as keyof FormState<T>],
-      focused: false,
-      error: prevState[key as keyof FormState<T>].touched
-        ? errors[key] || ""
-        : "",
-    },
+    touched: { ...prevState.touched, [name]: true },
   }));
+  validateField(name as keyof T, formState, validationRulesConfig).then(
+    (error) => {
+      setFormState((prevState) => ({
+        ...prevState,
+        errors: { ...prevState.errors, [name]: error },
+      }));
+    }
+  );
+
+  if (callback) callback(value, event);
 };
+
+export default onBlur;

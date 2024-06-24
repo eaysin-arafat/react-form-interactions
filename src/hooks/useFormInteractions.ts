@@ -1,88 +1,147 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { useCallback, useEffect, useState } from "react";
-import { onBlur, onChange, onFocus, onSubmit } from "../handle-event";
+import { useCallback, useState } from "react";
+import { onBlur, onChange, onSubmit } from "../handle-event";
 import {
-  Callback,
-  ChangeEventType,
-  FormEventType,
+  ChangeEvent,
+  FormReturnType,
   FormState,
-  OnSubmitCallbackType,
-  UseFormParams,
+  ValidationRules,
 } from "../types";
-import {
-  deepClone,
-  findFocusedKey,
-  getErrorsFromParams,
-  mapValuesToState,
-} from "../utils";
+import { debouncedValidateField } from "../utils/debounced-validate-field";
+import { getDefaultFormState } from "../utils/get-default-form-state";
+import { transformValidationConfig } from "../utils/transform-validation-config";
 
-const useFormInteractions = <T extends Record<string, any>>({
-  initialValue,
-  validator,
-}: UseFormParams<T>) => {
-  const [state, setState] = useState<FormState<T>>(
-    mapValuesToState(initialValue)
+const useFormInteractions = <T>(
+  initialValues: T,
+  validationRulesConfig: ValidationRules<T>
+): FormReturnType<T> => {
+  const [formState, setFormState] = useState<FormState<T>>(
+    getDefaultFormState(initialValues)
+  );
+  const convertedValidationConfig = transformValidationConfig(
+    validationRulesConfig
   );
 
-  const focusedKey = findFocusedKey(state);
-  const getErrors = getErrorsFromParams(state, validator);
+  const resetFormState = useCallback(() => {
+    setFormState(getDefaultFormState(initialValues));
+  }, [initialValues]);
+
+  const resetFormField = useCallback(
+    (fieldName: keyof T) => {
+      setFormState((prevState) => ({
+        ...prevState,
+        values: { ...prevState.values, [fieldName]: initialValues[fieldName] },
+        errors: { ...prevState.errors, [fieldName]: "" },
+        touched: { ...prevState.touched, [fieldName]: false },
+      }));
+    },
+    [initialValues]
+  );
+
+  const setFieldValue = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (fieldName: keyof T, value: any) => {
+      setFormState((prevState) => {
+        const newValues = { ...prevState.values, [fieldName]: value };
+        const newState = { ...prevState, values: newValues };
+
+        // Debounce the validation call
+        debouncedValidateField(
+          fieldName,
+          newState,
+          convertedValidationConfig,
+          setFormState
+        );
+
+        return newState;
+      });
+    },
+    [convertedValidationConfig]
+  );
 
   const handleChange = useCallback(
-    (e: ChangeEventType, callback?: Callback) => {
-      onChange(e, callback, setState);
+    (
+      event: ChangeEvent,
+      callback?: (value?: string, event?: ChangeEvent) => void
+    ) => {
+      onChange(event, setFieldValue, callback);
+    },
+    [setFieldValue]
+  );
+
+  const handleBlur = useCallback(
+    (
+      event: ChangeEvent,
+      callback?: (value?: string, event?: ChangeEvent) => void
+    ) => {
+      onBlur(
+        { event, callback },
+        formState,
+        convertedValidationConfig,
+        setFormState
+      );
+    },
+    [formState, convertedValidationConfig]
+  );
+
+  const handleSubmit = useCallback(
+    (onSubmitCallback: (values: T) => void) => {
+      return onSubmit(
+        onSubmitCallback,
+        formState,
+        convertedValidationConfig,
+        setFormState
+      );
+    },
+    [formState, convertedValidationConfig]
+  );
+
+  const setErrors = useCallback((errors: Partial<Record<keyof T, string>>) => {
+    setFormState((prevState) => ({
+      ...prevState,
+      errors: {
+        ...prevState.errors,
+        ...errors,
+      },
+    }));
+  }, []);
+
+  const setTouched = useCallback(
+    (touched: Partial<Record<keyof T, boolean>>) => {
+      setFormState((prevState) => ({
+        ...prevState,
+        touched: {
+          ...prevState.touched,
+          ...touched,
+        },
+      }));
     },
     []
   );
 
-  const handleFocus = useCallback((e: ChangeEventType, callback?: Callback) => {
-    onFocus(e, useState, callback);
+  const setSubmitting = useCallback((submitting: boolean) => {
+    setFormState((prevState) => ({
+      ...prevState,
+      isSubmitting: submitting,
+    }));
   }, []);
 
-  const handleBlur = useCallback(
-    (e: ChangeEventType, callback?: Callback) => {
-      onBlur(e, setState, getErrors, callback);
-    },
-    [getErrors]
-  );
-
-  const handleSubmit = useCallback(
-    (e: FormEventType, cb: (formState: OnSubmitCallbackType<T>) => void) => {
-      onSubmit(e, cb, state, setState, getErrors);
-    },
-    [getErrors, state]
-  );
-
-  const reset = useCallback(() => {
-    setState(mapValuesToState(initialValue, true));
-  }, [initialValue]);
-
-  useEffect(() => {
-    if (!focusedKey) return;
-
-    const prevState = deepClone(state);
-    const { errors } = getErrors;
-    const isError =
-      prevState[focusedKey].touched &&
-      prevState[focusedKey].isDirty &&
-      errors[focusedKey];
-
-    if (isError) {
-      prevState[focusedKey].error = errors[focusedKey] || "";
-    } else {
-      prevState[focusedKey].error = "";
-    }
-
-    setState(prevState);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state[focusedKey]?.value]);
-
   return {
-    formState: state,
-    handleSubmit,
+    formState: {
+      values: formState.values,
+      errors: formState.errors,
+      touched: formState.touched,
+    },
+    setFieldValue,
     handleChange,
-    handleFocus,
     handleBlur,
-    reset,
+    handleSubmit,
+    resetFormField,
+    resetFormState,
+    isValid: formState.isValid,
+    setErrors,
+    setTouched,
+    isSubmitting: formState.isSubmitting,
+    setSubmitting,
   };
 };
 

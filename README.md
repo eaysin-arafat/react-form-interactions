@@ -1,186 +1,347 @@
 # react-form-interactions
 
-`react-form-interactions` is a lightweight and customizable npm package for managing form state in React applications. It provides a custom hook, `useForm`, which simplifies the process of handling form state, validation, and user interactions.
-
 ## Features
 
-- **Custom Hook**: Utilize the `useForm` hook to manage form state effortlessly.
-- **Validation Support**: Implement custom validation logic to validate form fields.
-- **Easy Integration**: Seamlessly integrate with existing React applications.
-- **Error Handling**: Handle form submission errors with ease.
-- **Flexible Configuration**: Customize form behavior according to your specific requirements.
+- **Form State Management**: Manage and maintain state for form values, errors, and touched fields.
+- **Validation Rules**: Define comprehensive validation rules for form fields including required fields, minimum/maximum lengths, patterns, and more.
+- **Dynamic Validation**: Support dynamic validation rules that depend on other form values or external conditions.
+- **Async Validation**: Asynchronously validate form fields using custom validation functions or promises.
+- **Field Interactions**: Handle user interactions such as onChange and onBlur events for form fields.
+- **Submission Handling**: Manage form submission with integrated validation to prevent invalid data from being submitted.
+- **Form Reset**: Provide functionality to reset form fields to their initial values and clear validation errors.
+- **Extensible**: Easily extend with custom validation rules and behaviors tailored to specific application requirements.
+- **Integration with React**: Designed for seamless integration with React applications using hooks and functional components.
+- **Error Messaging**: Automatically manage and display error messages associated with form fields based on validation rules.
 
 ## Installation
 
-You can install `react-form-interactions` via npm or yarn:
+To install the `useFormInteractions` package, use npm or yarn:
 
 ```
-npm install react-form-interactions
+npm install useFormInteractions
 ```
 
 or
 
 ```
-yarn add react-form-interactions
+yarn add useFormInteractions
 ```
 
-## Usage
+## Examples
 
 ```
 import React from 'react';
-import { useForm } from 'react-form-interactions';
+import { useFormInteractions, ValidationRules } from 'useFormInteractions';
 
-const FormComponent = () => {
-  // Define initial form state and validation function
+interface FormData {
+  email: string;
+  password: string;
+}
+
+const initialValues: FormData = {
+  email: '',
+  password: '',
+};
+
+const validationRulesConfig: ValidationRules<FormData> = {
+  email: [{ required: true, email: true }],
+  password: [{ required: true, minLength: 8 }],
+};
+
+const FormWithValidationExample = () => {
   const {
     formState,
-    reset,
-    handleBlur,
-    handleFocus,
     handleChange,
+    handleBlur,
     handleSubmit,
-  } = useForm<FormState>({
-    initialValue,
-    validator,
-  });
+    resetFormState,
+    isValid,
+    isSubmitting,
+  } = useFormInteractions<FormData>(initialValues, validationRulesConfig);
 
-  // Handle form submission
-  const onSubmit = ({
-    hasError,
-    errors,
-    values,
-    touched,
-    focused,
-    isDirty,
-  }) => {
-    if (hasError) {
-      console.log({ errors });
-    } else {
-      console.log({ values, touched, focused, isDirty });
-    }
+  const onSubmitHandler = (data: FormData) => {
+    console.log(data);
+    // Submit logic here
   };
 
   return (
-    <form onSubmit={(e) => handleSubmit(e, onSubmit)}>
-      <input
-        type="text"
-        name="firstName"
-        placeholder="Bangladesh"
-        value={state.firstName.value}
-        onChange={handleChange}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-      />
-      {state.firstName.error && <p>{state.firstName.error}</p>}
+    <form onSubmit={handleSubmit(onSubmitHandler)}>
+      <div>
+        <label>Email:</label>
+        <input
+          type="email"
+          name="email"
+          value={formState.values.email}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
+        <div className="error">{formState.errors.email}</div>
+      </div>
 
-      <input
-        type="text"
-        name="lastName"
-        placeholder="Bangladesh"
-        value={state.lastName.value}
-        onChange={(e) =>
-          handleChange(e, () => {
-            console.log("onchange callback");
-          })
-        }
-        onFocus={(e) =>
-          handleFocus(e, () => {
-            console.log("onfocus callback");
-          })
-        }
-        onBlur={(e) =>
-          handleBlur(e, () => {
-            console.log("onblur callback");
-          })
-        }
-      />
-      {state.lastName.error && <p>{state.lastName.error}</p>}
+      <div>
+        <label>Password:</label>
+        <input
+          type="password"
+          name="password"
+          value={formState.values.password}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
+        <div className="error">{formState.errors.password}</div>
+      </div>
 
-      <button type="reset" onClick={reset}>Clear</button>
-      <button type="submit">Submit</button>
+      <button type="submit" disabled={!isValid || isSubmitting}>
+        Submit
+      </button>
+      <button type="button" onClick={resetFormState}>
+        Reset
+      </button>
     </form>
   );
 };
 
-export default FormComponent;
+export default FormWithValidationExample;
 ```
 
-# Documentation
+# API
 
-## Defining `initialValue` and `validator`
+### useFormInteractions(initialValues, validationRulesConfig)
 
-When using the `useForm` hook from `react-form-interactions`, you need to provide two essential parameters: `initialValue` and `validator`.
+### Parameters
 
-#### `initialValue`
+- `initialValues`: Object containing initial values for form fields.
+- `validationRulesConfig`: Configuration object defining validation rules for each form field.
 
-The `initialValue` parameter is an object that defines the initial state of your form fields. Each key in this object represents a form field name, and its corresponding value represents the initial value of that field.
+# Returns
 
-For example, if you have a form with `firstName` and `lastName` fields, you can define `initialValue` like this:
+**An object containing the following methods and properties:**
 
-```typescript
-const initialValue = {
-  firstName: "",
-  lastName: "",
+- `formState`: Object with `values`, `errors`, and `touched` properties representing current form state.
+- `setFieldValue`: Function to update a specific field's value in the form state.
+- `handleChange`: Function to handle changes in form field values.
+- `handleBlur`: Function to handle blur events on form fields.
+- `handleSubmit`: Function to handle form submission with validation.
+- `resetFormField`: Function to reset a specific field's value and errors to its initial state.
+- `resetFormState`: Function to reset all form values and errors to their initial state.
+- `isValid`: Boolean indicating if the entire form is currently valid based on validation rules.
+- `setErrors`: Function to manually set validation errors for specific fields.
+- `setTouched`: Function to manually set the `touched` state for specific fields.
+- `isSubmitting`: Boolean indicating if the form is currently being submitted.
+- `setSubmitting`: Function to manually set the submitting state of the form.
+
+# Validation Guide
+
+### **Usage Examples**
+
+**Note**: When specifying multiple validation rules with messages, each rule should be in its own object. For example, use <br/>
+`{ required: true }, { pattern: /^\d{10}$/, message: "Phone number must be 10 digits" }` <br/>
+instead of <br/>
+`{ required: true, pattern: /^\d{10}$/, message: "Phone number must be 10 digits" }`.
+
+### Simple Validation Rule
+
+```
+const validationConfig: ValidationRules<FormData> = {
+  email: [{ required: true, email: true, lowercase: true }]
 };
 ```
 
-#### `Validator`
+### Validation Rule with Custom Messages
 
-The validator parameter is a function that defines the validation logic for your form fields. It takes the current form values as input and returns an object containing validation errors, if any.
-
-For example, if you want to require both firstName and lastName fields to be filled out, you can define a validator function like this:
-
-```typescript
-const validator = (values: FormState): FormErrors => {
-  const errors: FormErrors = {};
-
-  if (!values.firstName) {
-    errors.firstName = "First name is required";
-  }
-
-  if (!values.lastName) {
-    errors.lastName = "Last name is required";
-  }
-
-  return errors;
+```
+const validationConfig: ValidationRules<FormData> = {
+  email: [
+    { required: true, message: "Email is required" },
+    { email: true, message: "Must be a valid email" },
+    { lowercase: true, message: "Must be in lowercase" }
+  ]
 };
 ```
 
-## Return Statement Details
+### Custom Validation Rule
 
-### `formState`
+```
+const validationConfig: ValidationRules<FormData> = {
+  password: [
+    {
+      custom: (value, formValues) => formValues.email !== "000" || value !== "000",
+      message: "Password cannot be '000' if email is '000'"
+    },
+    { required: true }
+  ]
+};
+```
 
-- `values`: An object containing the current values of each form field.
-- `touched`: An object indicating whether each form field has been touched (i.e., interacted with) by the user.
-- `focused`: An object indicating whether each form field is currently focused.
-- `isDirty`: An object indicating whether each form field has been modified from its initial value.
+### Custom Validation Rule without Message
 
-### `reset()`
+```
+const validationConfig: ValidationRules<FormData> = {
+  password: [
+    {
+      custom: (value, formValues) => formValues.email !== "000" || value !== "000"
+    },
+    { required: true }
+  ]
+};
+```
 
-A function that resets all form fields to their initial values.
+### Validation Rule with revalidateFields
 
-### `handleBlur(callback?)`
+```
+const validationConfig: ValidationRules<FormData> = {
+  email: [
+    {
+      custom: (value) => value !== "000",
+      message: "Email cannot be '000'",
+      revalidateFields: ["password"]
+    }
+  ],
+  password: [
+    {
+      custom: (value, formValues) => formValues.email !== "000" || value !== "000",
+      message: "Password cannot be '000' if email is '000'"
+    },
+    { required: true }
+  ]
+};
+```
 
-A function that handles the blur event on form fields. It optionally takes a callback function that will be invoked with the event object.
+**Note** : In the above example, the password input field's validation depends on the email field. When the email field is updated, the password validation error will be updated as well.
 
-### `handleFocus(callback?)`
+### Full Validation Config Example
 
-A function that handles the focus event on form fields. It optionally takes a callback function that will be invoked with the event object.
+```
+const validationRulesConfig: ValidationRules<FormData> = {
+  email: [
+    { required: true, message: "Required" },
+    { email: true, message: "Invalid email format" },
+    {
+      custom: (value) => value !== "000",
+      message: "Cannot be '000'",
+      revalidateFields: ["password"],
+    },
+  ],
+  password: [
+    { required: true, message: "Required" },
+    {
+      custom: (value, formValues) => formValues.email !== "000" || value !== "000",
+      message: "Cannot be '000' if email is '000'",
+    },
+  ],
+  username: [
+    { required: true, message: "Required" },
+    {
+      custom: (value) => new Promise((resolve) => setTimeout(() => resolve(value !== "takenUsername"), 300)),
+      message: "Already taken",
+    },
+  ],
+  confirmPassword: [
+    { required: true, message: "Required" },
+    {
+      custom: (value, formValues) => value === formValues.password,
+      message: "Passwords must match",
+      revalidateFields: ["password"],
+    },
+  ],
+  age: [
+    { required: true, message: "Required" },
+    { numeric: true, message: "Must be a number" },
+    { minValue: 18, message: "Must be at least 18" },
+    { maxValue: 100, message: "Must be at most 100" },
+    {
+      custom: (value) => parseInt(value, 10) % 2 === 0,
+      message: "Must be even",
+    },
+  ],
+  phoneNumber: [
+    { required: true, message: "Required" },
+    { pattern: /^\d{10}$/, message: "Must be 10 digits" },
+    {
+      custom: (value) => value.startsWith("07"),
+      message: "Must start with '07'",
+    },
+  ],
+  website: [
+    { url: true, message: "Must be a valid URL" },
+  ],
+};
+```
 
-### `handleChange(callback?)`
+## Built-in Validation Rules
 
-A function that handles the change event on form fields. It optionally takes a callback function that will be invoked with the event object.
+### Basic Validation
 
-### `handleSubmit(callback?)`
+- `required`: Field must have a value.
+- `nullable`: Field can be null or undefined.
+- `optional`: Field is not required.
+- `allowEmpty`: Field can be empty ("").
 
-A function that handles form submission. It optionally takes a callback function that will be invoked with an object containing the form submission details, including whether there are any errors, the errors object, the form values, touched fields, focused fields, and dirty fields.
+### Text Validation
 
-For detailed documentation and examples, visit the [GitHub repository](https://github.com/eaysin-arafat/react-form-interactions.git).
+- `maxLength`: Maximum length of input.
+- `minLength`: Minimum length of input.
+- `pattern`: Regular expression pattern for validation.
+- `email`: Must be a valid email format.
+- `numeric`: Must be a numeric value.
+- `alphanumeric`: Must be alphanumeric.
 
-## License
+### String Manipulation
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+- `trim`: Remove leading and trailing whitespace.
+- `lowercase`: Convert input to lowercase.
+- `uppercase`: Convert input to uppercase.
+- `startsWith`: Input must start with a specified string.
+- `endsWith`: Input must end with a specified string.
 
----
+### Specialized Input
 
-Feel free to customize and expand upon this README to best fit your package's features and usage guidelines!
+- `phone`: Must be a valid phone number format.
+- `creditCard`: Must be a valid credit card number.
+- `password`: Must meet password strength criteria.
+- `fieldMatch`: Must match another field in the form (keyof T).
+
+### Numeric Constraints
+
+- `maxValue`: Maximum numeric value allowed.
+- `minValue`: Minimum numeric value allowed.
+- `lessThan`: Must be less than a specified number.
+- `moreThan`: Must be more than a specified number.
+- `positive`: Must be a positive number.
+- `negative`: Must be a negative number.
+- `integer`: Must be an integer.
+- `truncate`: Truncate decimal places.
+- `round`: Round to a specified precision.
+
+### Date and Time
+
+- `date`: Must be a valid date format.
+- `dateTime`: Must be a valid date and time format.
+- `time`: Additional options for time validation (hourFormat, mode).
+
+### File Validation
+
+- `fileType`: Allowed file types.
+- `fileSize`: Maximum file size in bytes.
+
+### Boolean and URL
+
+- `boolean`: Must be a boolean value (true or false).
+- `url`: Must be a valid URL format.
+- `checkboxRequired`: Checkbox must be checked.
+
+### Form Interactions
+
+- `asyncCheck`: Asynchronously validate using a custom function.
+- `custom`: Synchronous or asynchronous custom validation function.
+
+### revalidateFields
+
+- `revalidateFields`: Array of field names that this validation rule depends on. When any of the dependent fields are updated, the validation rule will re-run.
+
+## Summary
+
+This validation guide provides an overview of the built-in validation rules available in the useFormInteractions package, along with examples of how to configure and use these rules in your React forms. The package offers a flexible and comprehensive way to manage form validation, ensuring data integrity and improving the user experience.
+
+# Additional Resources
+
+- **GitHub Repository**: Link to the useFormInteractions GitHub repository.

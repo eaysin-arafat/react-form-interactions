@@ -1,42 +1,18 @@
-// handleChange.ts
-import { Callback, FormState } from "../types";
-import { validateCallback } from "../utils";
+import { ChangeEvent } from "../types/event";
 
 export const onChange = <T>(
-  e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
-  callback: Callback | undefined,
-  setState: React.Dispatch<React.SetStateAction<FormState<T>>>
+  event: ChangeEvent,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  setFieldValue: (fieldName: keyof T, value: any) => void,
+  callback?: (value?: string, event?: ChangeEvent) => void
 ) => {
-  const { name: key, value, type } = e.target;
-  let updateValue;
+  const { name, value, type } = event.target;
+  const updateValue =
+    type === "checkbox" ? (event.target as HTMLInputElement).checked : value;
 
-  if (type === "checkbox") {
-    updateValue = (e.target as HTMLInputElement).checked;
-  } else {
-    updateValue = value;
-  }
+  setFieldValue(name as keyof T, updateValue);
 
-  if (callback) {
-    validateCallback(callback, e);
-  }
-
-  setState((prevState) => {
-    const wasDirty = prevState[key as keyof T]?.isDirty || false;
-
-    let isDirty;
-    if (type === "checkbox") {
-      isDirty = wasDirty || (e.target as HTMLInputElement).checked;
-    } else {
-      isDirty = wasDirty || value.length > 0;
-    }
-
-    return {
-      ...prevState,
-      [key]: {
-        ...prevState[key as keyof T],
-        value: updateValue,
-        isDirty,
-      },
-    };
-  });
+  if (callback) callback(value, event);
 };
+
+export default onChange;

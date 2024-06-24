@@ -1,6 +1,5 @@
-export type { Callback } from "./callback-types";
-export type { FormErrors } from "./error-types";
-export type { ChangeEventType, FormEventType } from "./event-types";
-export type { FormState } from "./form-state-types";
-export type { OnSubmitCallbackType } from "./on-submit-types";
-export type { UseFormParams } from "./param-types";
+export type { CallbackType } from "./callback";
+export type { ChangeEvent, FormEvent } from "./event";
+export type { FormState } from "./form-state";
+export type { FormReturnType } from "./user-form-return";
+export type { ValidationRule, ValidationRules } from "./validations";

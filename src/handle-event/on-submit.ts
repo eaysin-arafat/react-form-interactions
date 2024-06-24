@@ -1,37 +1,37 @@
-import { FormState, OnSubmitCallbackType } from "../types";
-import { deepClone, getErrorsFromParams, mapStateToKeys } from "../utils";
+import { FormEvent } from "../types";
+import { FormState } from "../types/form-state";
+import { ValidationRule } from "../types/validations";
+import validateForm from "../utils/validate-form";
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export const onSubmit = <T extends Record<string, any>>(
-  e: React.FormEvent<HTMLFormElement>,
-  cb: (formState: OnSubmitCallbackType<T>) => void,
-  state: FormState<T>,
-  setState: React.Dispatch<React.SetStateAction<FormState<T>>>,
-  getErrors: ReturnType<typeof getErrorsFromParams<T>>
+export const onSubmit = <T>(
+  onSubmitCallback: (values: T) => void,
+  formState: FormState<T>,
+  validationRulesConfig: Partial<Record<keyof T, ValidationRule<T>[]>>,
+  setFormState: React.Dispatch<React.SetStateAction<FormState<T>>>
 ) => {
-  e.preventDefault();
+  return async (event: FormEvent) => {
+    event.preventDefault();
 
-  const { errors, hasError, values } = getErrors;
-  const touched = mapStateToKeys(state, "touched");
-  const focused = mapStateToKeys(state, "focused");
-  const isDirty = mapStateToKeys(state, "isDirty");
+    setFormState((prevState) => ({
+      ...prevState,
+      isSubmitting: true,
+    }));
 
-  const prevState = deepClone(state);
+    const isValid = await validateForm(
+      formState,
+      validationRulesConfig,
+      setFormState
+    );
 
-  if (hasError) {
-    Object.keys(errors).forEach((key) => {
-      prevState[key].error = errors[key] || "";
-    });
+    if (isValid) {
+      onSubmitCallback(formState.values); // Call onSubmit callback with form values
+    }
 
-    setState(prevState);
-  }
-
-  cb({
-    hasError,
-    errors,
-    values,
-    touched,
-    focused,
-    isDirty,
-  });
+    setFormState((prevState) => ({
+      ...prevState,
+      isSubmitting: false,
+    }));
+  };
 };
+
+export default onSubmit;
