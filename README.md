@@ -2,16 +2,16 @@
 
 ## Features
 
-- **Form State Management**: Manage and maintain state for form values, errors, and touched fields.
+- **Form State Management**: Manage and maintain state for form `values`, `errors`, and `touched` fields.
 - **Validation Rules**: Define comprehensive validation rules for form fields including required fields, minimum/maximum lengths, patterns, and more.
 - **Dynamic Validation**: Support dynamic validation rules that depend on other form values or external conditions.
-- **Async Validation**: Asynchronously validate form fields using custom validation functions or promises.
-- **Field Interactions**: Handle user interactions such as onChange and onBlur events for form fields.
+- **Async Validation**: Asynchronously validate form fields using `custom validation functions` or `promises`.
+- **Field Interactions**: Handle user interactions such as `onChange` and `onBlur` events for form fields.
 - **Submission Handling**: Manage form submission with integrated validation to prevent invalid data from being submitted.
-- **Form Reset**: Provide functionality to reset form fields to their initial values and clear validation errors.
-- **Extensible**: Easily extend with custom validation rules and behaviors tailored to specific application requirements.
-- **Integration with React**: Designed for seamless integration with React applications using hooks and functional components.
-- **Error Messaging**: Automatically manage and display error messages associated with form fields based on validation rules.
+- **Form Reset**: Provide functionality to `reset` form fields to their `initial values` and clear validation errors.
+- **Extensible**: Easily extend with `custom validation rules` and behaviors tailored to specific application requirements.
+- **Integration with React**: Designed for seamless integration with React applications `using hooks` and `functional components`.
+- **Error Messaging**: Automatically `manage and display error messages` associated with form fields `based on validation rules`.
 
 ## Installation
 
