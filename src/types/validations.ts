@@ -54,9 +54,6 @@ export interface ValidationRule<T> {
   url?: boolean;
   checkboxRequired?: boolean;
   asyncCheck?: (value: any) => Promise<boolean>;
-  custom?: (
-    value: string | number | boolean,
-    formState: T
-  ) => boolean | Promise<boolean>;
+  custom?: (value: any, formState: T) => boolean | Promise<boolean>;
   revalidateFields?: string[];
 }

@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { onBlur, onChange, onSubmit } from "../handle-event";
 import {
   ChangeEvent,
@@ -37,6 +37,11 @@ const useFormInteractions = <T>(
     [initialValues]
   );
 
+  const debouncedValidateFieldFn = useMemo(
+    () => debouncedValidateField(validationRulesConfig, setFormState),
+    [validationRulesConfig, setFormState]
+  );
+
   const setFieldValue = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (fieldName: keyof T, value: any) => {
@@ -45,17 +50,12 @@ const useFormInteractions = <T>(
         const newState = { ...prevState, values: newValues };
 
         // Debounce the validation call
-        debouncedValidateField(
-          fieldName,
-          newState,
-          convertedValidationConfig,
-          setFormState
-        );
+        debouncedValidateFieldFn(fieldName, newState);
 
         return newState;
       });
     },
-    [convertedValidationConfig]
+    [debouncedValidateFieldFn]
   );
 
   const handleChange = useCallback(
