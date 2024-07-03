@@ -28,7 +28,6 @@ const validationRulesConfig: ValidationRules<FormData> = {
     {
       custom: (value) => value !== "000",
       message: "Cannot be '000'",
-      dependencies: ["password"],
     },
   ],
   password: [
@@ -50,7 +49,6 @@ const validationRulesConfig: ValidationRules<FormData> = {
     {
       custom: (value, formValues) => value === formValues.password,
       message: "Passwords must match",
-      dependencies: ["password"],
     },
   ],
   age: [
