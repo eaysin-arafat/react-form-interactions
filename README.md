@@ -204,29 +204,6 @@ const validationConfig: ValidationRules<FormData> = {
 };
 ```
 
-### Validation Rule with revalidateFields
-
-```
-const validationConfig: ValidationRules<FormData> = {
-  email: [
-    {
-      custom: (value) => value !== "000",
-      message: "Email cannot be '000'",
-      revalidateFields: ["password"]
-    }
-  ],
-  password: [
-    {
-      custom: (value, formValues) => formValues.email !== "000" || value !== "000",
-      message: "Password cannot be '000' if email is '000'"
-    },
-    { required: true }
-  ]
-};
-```
-
-**Note** : In the above example, the password input field's validation depends on the email field. When the email field is updated, the password validation error will be updated as well.
-
 ### Full Validation Config Example
 
 ```
@@ -237,7 +214,6 @@ const validationRulesConfig: ValidationRules<FormData> = {
     {
       custom: (value) => value !== "000",
       message: "Cannot be '000'",
-      revalidateFields: ["password"],
     },
   ],
   password: [
@@ -259,7 +235,6 @@ const validationRulesConfig: ValidationRules<FormData> = {
     {
       custom: (value, formValues) => value === formValues.password,
       message: "Passwords must match",
-      revalidateFields: ["password"],
     },
   ],
   age: [
@@ -352,10 +327,6 @@ const validationRulesConfig: ValidationRules<FormData> = {
 
 - `asyncCheck`: Asynchronously validate using a custom function.
 - `custom`: Synchronous or asynchronous custom validation function.
-
-### revalidateFields
-
-- `revalidateFields`: Array of field names that this validation rule depends on. When any of the dependent fields are updated, the validation rule will re-run.
 
 ## Contribution
 
