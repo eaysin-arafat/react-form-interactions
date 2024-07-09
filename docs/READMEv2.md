@@ -2,7 +2,6 @@
 
 ## Features
 
-- **Zero Dependencies**: This lightweight React form hook manages form state, validation, and interactions without relying on external libraries.
 - **Form State Management**: Manage and maintain state for form values, errors, and touched fields.
 - **Validation Rules**: Define comprehensive validation rules for form fields including required fields, minimum/maximum lengths, patterns, and more.
 - **Dynamic Validation**: Support dynamic validation rules that depend on other form values or external conditions.
