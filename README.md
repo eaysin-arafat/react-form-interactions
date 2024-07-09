@@ -27,7 +27,7 @@ or
 yarn add useFormInteractions
 ```
 
-## Examples
+## Usage
 
 ```
 import React from 'react';
@@ -72,8 +72,8 @@ const FormWithValidationExample = () => {
           type="email"
           name="email"
           value={formState.values.email}
-          onChange={handleChange}
-          onBlur={handleBlur}
+          onChange={(event) => handleChange(event, (value) => console.log(value))}
+          onBlur={(event) => handleBlur(event, (value, event) => console.log(value))}
         />
         <div className="error">{formState.errors.email}</div>
       </div>
@@ -118,8 +118,8 @@ export default FormWithValidationExample;
 
 - `formState`: Object with `values`, `errors`, and `touched` properties representing current form state.
 - `setFieldValue`: Function to update a specific field's value in the form state.
-- `handleChange`: Function to handle changes in form field values.
-- `handleBlur`: Function to handle blur events on form fields.
+- `handleChange`: Function to handle changes in form field values. Can accept a callback to interact with the changed value.
+- `handleBlur`: Function to handle blur events on form fields. Can accept a callback to interact with the blurred value.
 - `handleSubmit`: Function to handle form submission with validation.
 - `resetFormField`: Function to reset a specific field's value and errors to its initial state.
 - `resetFormState`: Function to reset all form values and errors to their initial state.
@@ -128,6 +128,25 @@ export default FormWithValidationExample;
 - `setTouched`: Function to manually set the `touched` state for specific fields.
 - `isSubmitting`: Boolean indicating if the form is currently being submitted.
 - `setSubmitting`: Function to manually set the submitting state of the form.
+
+## `handleChange` and `handleBlur` with Callbacks
+You can pass a callback to the `handleChange` and `handleBlur` functions to interact with the value of the form field when the event occurs. The callback receives the field value and, in the case of `handleBlur`, the event object.
+
+```
+<input
+  type="text"
+  name="exampleField"
+  value={formState.values.exampleField}
+  onChange={(event) => handleChange(event, (value) => console.log(value))}
+  onBlur={(event) => handleBlur(event, (value, event) => console.log(value))}
+/>
+```
+In the example above:
+
+- The `handleChange` function logs the value of the field whenever the input changes.
+- The `handleBlur` function logs the value of the field and the event object whenever the input loses focus.
+
+This allows for custom logic to be executed during these interactions, providing flexibility for various use cases such as real-time validation or analytics.
 
 # Validation Guide
 
