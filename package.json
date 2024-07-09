@@ -1,6 +1,6 @@
 {
   "name": "react-form-interactions",
-  "version": "2.0.2",
+  "version": "3.0.1",
   "type": "module",
   "files": [
     "dist"
@@ -10,8 +10,9 @@
     "hook-form",
     "custom-hook-form"
   ],
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -19,10 +20,7 @@
     }
   },
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
+    "build": "rollup -c",
     "publish": "yarn build && npm publish"
   },
   "repository": {
@@ -32,6 +30,7 @@
   "bugs": {
     "url": "https://github.com/eaysin-arafat/react-form.git/issues"
   },
+<<<<<<< HEAD
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -49,5 +48,24 @@
     "typescript": "^5.2.2",
     "vite": "^5.2.0",
     "vite-plugin-dts": "^3.9.1"
+=======
+  "peerDependencies": {
+    "react": ">=16.8.0",
+    "react-dom": ">=16.8.0"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^26.0.1",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/react": "^18.3.3",
+    "react": "^18.3.1",
+    "rollup": "^4.18.1",
+    "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-peer-deps-external": "^2.2.4",
+    "rollup-plugin-postcss": "^4.0.2",
+    "rollup-plugin-terser": "^7.0.2",
+    "tslib": "^2.6.3",
+    "typescript": "^5.5.3"
+>>>>>>> 10c554927da7523def2e5dca020297e6ea25e52c
   }
 }
