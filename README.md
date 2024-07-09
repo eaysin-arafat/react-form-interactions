@@ -197,9 +197,9 @@ const validationConfig: ValidationRules<FormData> = {
 const validationConfig: ValidationRules<FormData> = {
   password: [
     {
-      custom: (value, formValues) => formValues.email !== "000" || value !== "000"
+      custom: (value, formValues) => formValues.email !== "000" || value !== "000",
+      required: true
     },
-    { required: true }
   ]
 };
 ```
