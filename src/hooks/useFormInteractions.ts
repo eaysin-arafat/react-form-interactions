@@ -38,8 +38,8 @@ const useFormInteractions = <T>(
   );
 
   const debouncedValidateFieldFn = useMemo(
-    () => debouncedValidateField(validationRulesConfig, setFormState),
-    [validationRulesConfig, setFormState]
+    () => debouncedValidateField(convertedValidationConfig, setFormState),
+    [convertedValidationConfig]
   );
 
   const setFieldValue = useCallback(

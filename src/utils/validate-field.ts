@@ -12,10 +12,7 @@ export const validateField = async <T>(
 ) => {
   const fieldValidationRules = validationRulesConfig[fieldName];
 
-  if (!fieldValidationRules) {
-    return ""; // or handle the absence of validation rules as needed
-  }
-
+  if (!fieldValidationRules) return "";
   let errorMessage: string = "";
 
   for (const rule of fieldValidationRules) {
@@ -39,6 +36,8 @@ export const validateField = async <T>(
         typeof messageOrFunction === "function"
           ? messageOrFunction(rule[ruleType])
           : messageOrFunction;
+
+      console.log({ message });
 
       if (!isValid) {
         errorMessage = rule.message || message || "";

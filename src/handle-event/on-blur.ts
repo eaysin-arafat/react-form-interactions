@@ -10,14 +10,14 @@ export const onBlur = <T>(
   setFormState: React.Dispatch<React.SetStateAction<FormState<T>>>
 ) => {
   const { name, value } = event.target;
-  setFormState((prevState) => ({
-    ...prevState,
-    touched: { ...prevState.touched, [name]: true },
-  }));
+
   validateField(name as keyof T, formState, validationRulesConfig).then(
     (error) => {
+      console.log({ error });
+
       setFormState((prevState) => ({
         ...prevState,
+        touched: { ...prevState.touched, [name]: true },
         errors: { ...prevState.errors, [name]: error },
       }));
     }

@@ -13,6 +13,7 @@ export const debouncedValidateField = <T>(
         newState,
         validationRulesConfig
       );
+
       // Update errors only if there's a change
       if (newState.errors[fieldName] !== error) {
         setFormState((prevState) => ({

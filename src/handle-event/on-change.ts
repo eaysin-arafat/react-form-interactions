@@ -7,6 +7,8 @@ export const onChange = <T>(
   callback?: (value?: string, event?: ChangeEvent) => void
 ) => {
   const { name, value, type } = event.target;
+  console.log({ name, value });
+
   const updateValue =
     type === "checkbox" ? (event.target as HTMLInputElement).checked : value;
 
