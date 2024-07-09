@@ -338,6 +338,21 @@ const validationRulesConfig: ValidationRules<FormData> = {
 
 - `revalidateFields`: Array of field names that this validation rule depends on. When any of the dependent fields are updated, the validation rule will re-run.
 
+## Contribution
+
+#### Contributions to useFormInteractions are welcome! To contribute:
+
+- Fork the repository and clone it locally.
+- Create a new branch for your feature or bug fix.
+- Make your changes and ensure tests pass.
+- Commit your changes and push them to your fork.
+- Submit a pull request with a clear description of your changes.
+  We appreciate all contributions, from bug fixes to new features and improvements. Thank you for helping make useFormInteractions even better!
+
 ## Summary
 
 This validation guide provides an overview of the built-in validation rules available in the useFormInteractions package, along with examples of how to configure and use these rules in your React forms. The package offers a flexible and comprehensive way to manage form validation, ensuring data integrity and improving the user experience.
+
+# Additional Resources
+
+- **GitHub Repository**: https://github.com/eaysin-arafat/react-form-interactions
